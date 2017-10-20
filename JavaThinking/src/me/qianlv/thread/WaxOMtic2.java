@@ -36,7 +36,7 @@ class CarLock {
         lock.lock();
         try {
             while (!waxOn) {
-                condition.wait();
+                condition.await();
             }
         } finally {
             lock.unlock();
