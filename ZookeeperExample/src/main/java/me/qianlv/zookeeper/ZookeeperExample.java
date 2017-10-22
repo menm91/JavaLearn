@@ -22,6 +22,9 @@ public class ZookeeperExample {
             if (countDownLatch.getCount() > 0 && event.getState() == Watcher.Event.KeeperState.SyncConnected) {
                 countDownLatch.countDown();
             }
+
+            System.out.println(event.getType());
+            System.out.println(event.getPath());
         });
 
         countDownLatch.await();
@@ -30,6 +33,7 @@ public class ZookeeperExample {
 
     @Test
     public void create() throws KeeperException, InterruptedException {
+        //参数1: 路径 参数2: 保存的数据 参数3: 权限 参数4: 节点类型
         zooKeeper.create("/hello", "Hello Zookeeper".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
     }
 
@@ -44,8 +48,10 @@ public class ZookeeperExample {
     }
 
     @Test
-    public void query() {
-        System.out.println(zooKeeper.getState());
+    public void query() throws KeeperException, InterruptedException {
+        //参数0: 路径 参数2: 是否使用之前(客户端)的事件函数 参数3: 数据的元信息
+        byte[] data = zooKeeper.getData("/hello", true, null);
+        System.out.println(data);
     }
 
     @After
